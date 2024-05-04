@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: service-users
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/db_users
+server:
+  port: 8091
