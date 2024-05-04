@@ -8,6 +8,10 @@ spring:
             uri: lb://service-users
             predicates:
               - Path=/user/**
+          - id: service-login
+            uri: lb://service-login
+            predicates:
+              - Path=/login/**
 server:
   port: 8765
 eureka:
