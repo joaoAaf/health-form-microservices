@@ -17,7 +17,7 @@ public class UserController extends BaseController {
 
     private final UserService userService;
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<Object> getAllUsers() {
         return getResponse(userService.findUsers(), HttpStatus.OK);
     }
