@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import estudo.serviceusers.dto.UserAuth;
 import estudo.serviceusers.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -13,7 +14,7 @@ public class AuthService extends BaseService {
 
     private final UserRepository userRepo;
     
-    public Optional<Object> findUserEmail(String email) {
+    public Optional<UserAuth> findUserEmail(String email) {
         var user = userRepo.findByEmail(email);
         if (user.isPresent()) {
             return Optional.of(toDtoAuth(user.get()));
