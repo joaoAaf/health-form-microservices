@@ -7,8 +7,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import estudo.servicelogin.dto.Login;
 import estudo.servicelogin.dto.User;
 import estudo.servicelogin.service.TokenService;
-import estudo.servicelogin.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -26,14 +23,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("login")
 public class LoginController extends BaseController {
 
-    private final UserService userService;
     private final TokenService tokenService;
     private final AuthenticationManager authManager;
-
-    @GetMapping("{email}")
-    public ResponseEntity<User> getUser(@PathVariable String email) {
-        return ResponseEntity.ok().body(userService.getUser(email).get());
-    }
 
     @PostMapping
     public ResponseEntity<Object> login(@RequestBody @Valid Login login) {
