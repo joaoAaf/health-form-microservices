@@ -2,12 +2,13 @@ package estudo.serviceusers.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import estudo.serviceusers.service.UserService;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -23,9 +24,10 @@ public class UserController extends BaseController {
     }
     
     @GetMapping
-    public ResponseEntity<Object> getUser(HttpServletResponse response) {
+    public ResponseEntity<Object> getUser() {
         try {
-            var user = userService.findUserId(response.getHeader("X-User-Id"));
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            var user = userService.findUserId(authentication.getName());
             if (user.isPresent()) {
                 return getResponse(user.get(), HttpStatus.OK);
             }
