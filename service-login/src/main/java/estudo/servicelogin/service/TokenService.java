@@ -15,7 +15,6 @@ public class TokenService {
 
     public String generateToken(User user) {
         return JWT.create()
-                .withIssuer(user.getClass().getSimpleName())
                 .withSubject(user.id())
                 .withExpiresAt(LocalDateTime.now()
                         .plusMinutes(30)
