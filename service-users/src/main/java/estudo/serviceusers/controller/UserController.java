@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import estudo.serviceusers.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -22,21 +23,25 @@ public class UserController extends BaseController {
     public ResponseEntity<Object> getAllUsers() {
         return getResponse(userService.findUsers(), HttpStatus.OK);
     }
-    
+
     @GetMapping
-    public ResponseEntity<Object> getUser() {
+    public ResponseEntity<Object> getUser(HttpServletRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             var user = userService.findUserId(authentication.getName());
             if (user.isPresent()) {
+                log(this, request.getMethod(), request.getRequestURI(), authentication.getName(),
+                        HttpStatus.OK.value());
                 return getResponse(user.get(), HttpStatus.OK);
             }
-            return getResponse("Este usuário não existe.", HttpStatus.NOT_FOUND);
+            log(this, request.getMethod(), request.getRequestURI(), authentication.getName(),
+                        HttpStatus.OK.value(), "Este usuário não existe");
+            return getResponse("Este usuário não existe", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            return getResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            log(this, request.getMethod(), request.getRequestURI(), authentication.getName(),
+                        HttpStatus.OK.value(), e.getMessage());
+            return getResponse("Serviço indisponível", HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
-    
-
 
 }
