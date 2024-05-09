@@ -32,21 +32,24 @@ public class FilterToken extends OncePerRequestFilter {
 			if (tokenService.loggedId(token).isEmpty()) {
 				response.setStatus(HttpStatus.UNAUTHORIZED.value());
 				response.setContentType("application/json");
-				response.getWriter().write("{\"error\": \"Token inválido ou expirado.\"}");
+				response.getWriter().write("{\"error\": \"Token inválido ou expirado\"}");
 				LoggerFactory.getLogger(this.getClass()).error("Token inválido ou expirado");
 				return;
 			}
 			var user = new UserLogged(tokenService.loggedId(token).get());
 			var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 			SecurityContextHolder.getContext().setAuthentication(authentication);
-		} else if (!request.getRequestURI().startsWith("/auth")) {
-			response.setStatus(HttpStatus.UNAUTHORIZED.value());
-			response.setContentType("application/json");
-			response.getWriter().write("{\"error\": \"Token ausente.\"}");
-			LoggerFactory.getLogger(this.getClass()).error("Token ausente.");
+			filterChain.doFilter(request, response);
 			return;
 		}
-		filterChain.doFilter(request, response);
+		if (request.getRequestURI().startsWith("/auth")
+				|| request.getRequestURI().equals("/user/register")) {
+			filterChain.doFilter(request, response);
+			return;
+		}
+		response.setStatus(HttpStatus.UNAUTHORIZED.value());
+		response.setContentType("application/json");
+		response.getWriter().write("{\"error\": \"Token ausente\"}");
+		LoggerFactory.getLogger(this.getClass()).error("Token ausente");
 	}
-
 }

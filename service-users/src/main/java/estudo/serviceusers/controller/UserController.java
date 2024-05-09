@@ -8,9 +8,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import estudo.serviceusers.dto.UserSave;
 import estudo.serviceusers.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RequiredArgsConstructor
 @RestController
@@ -19,9 +23,22 @@ public class UserController extends BaseController {
 
     private final UserService userService;
 
-    @GetMapping("/all")
-    public ResponseEntity<Object> getAllUsers() {
-        return getResponse(userService.findUsers(), HttpStatus.OK);
+    @PostMapping("/register")
+    public ResponseEntity<Object> postUser(@RequestBody @Valid UserSave user, HttpServletRequest request) {
+        try {
+            if (userService.findUserEmail(user.email()).isEmpty()) {
+                log(this, request.getMethod(), request.getRequestURI(), "Novo id cadastrado",
+                        HttpStatus.CREATED.value());
+                return getResponse(userService.saveUser(user), HttpStatus.CREATED);
+            }
+            log(this, request.getMethod(), request.getRequestURI(), "Não cadastrado",
+                    HttpStatus.BAD_REQUEST.value(), "Já existe um usuário com este email");
+            return getResponse("Já existe um usuário com este email", HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            log(this, request.getMethod(), request.getRequestURI(), "Não cadastrado",
+                    HttpStatus.SERVICE_UNAVAILABLE.value(), e.getMessage());
+            return getResponse("Serviço indisponível", HttpStatus.SERVICE_UNAVAILABLE);
+        }
     }
 
     @GetMapping
@@ -35,11 +52,11 @@ public class UserController extends BaseController {
                 return getResponse(user.get(), HttpStatus.OK);
             }
             log(this, request.getMethod(), request.getRequestURI(), authentication.getName(),
-                        HttpStatus.OK.value(), "Este usuário não existe");
+                    HttpStatus.OK.value(), "Este usuário não existe");
             return getResponse("Este usuário não existe", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             log(this, request.getMethod(), request.getRequestURI(), authentication.getName(),
-                        HttpStatus.OK.value(), e.getMessage());
+                    HttpStatus.OK.value(), e.getMessage());
             return getResponse("Serviço indisponível", HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
