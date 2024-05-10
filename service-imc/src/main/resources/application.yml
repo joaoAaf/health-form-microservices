@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: name=service-imc
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/db_imc
+server:
+  port: 0
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+      preferIpAddress: true
