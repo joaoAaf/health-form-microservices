@@ -22,7 +22,7 @@ public class UserService extends BaseService {
         return users.stream().map(this::toDto).toList();
     }
 
-    public Optional<Object> findUserId(String id) {
+    public Optional<UserView> findUserId(String id) {
         var user = userRepo.findById(id);
         if (user.isPresent()) {
             return Optional.of(toDto(user.get()));
@@ -30,7 +30,7 @@ public class UserService extends BaseService {
         return Optional.empty();
     }
 
-    public Optional<Object> findUserEmail(String email) {
+    public Optional<UserView> findUserEmail(String email) {
         var user = userRepo.findByEmail(email);
         if (user.isPresent()) {
             return Optional.of(toDto(user.get()));
@@ -48,7 +48,7 @@ public class UserService extends BaseService {
         userRepo.deleteById(id);
     }
 
-    public UserView update(UserMod newUser, String userId) {
+    public UserView updateUser(UserMod newUser, String userId) {
 		var user = userRepo.findById(userId).get();
 		updateData(user, newUser);
 		return toDto(userRepo.save(user));

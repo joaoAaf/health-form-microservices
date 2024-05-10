@@ -46,7 +46,7 @@ public class BaseService {
     if (validateUpdate(oldUser.getName(), newUser.name())) {
       oldUser.setName(newUser.name());
     }
-    if (validateUpdate(oldUser.getEmail(), newUser.name())) {
+    if (validateUpdate(oldUser.getEmail(), newUser.email())) {
       oldUser.setEmail(newUser.email());
     }
     if (validateUpdate(oldUser.getPass(), newUser.pass())) {
@@ -55,8 +55,7 @@ public class BaseService {
   }
 
   protected boolean validateUpdate(String attOldUser, String attNewUser) {
-    return !attNewUser.equals(attOldUser) && !attNewUser.equals(null)
-        && !attNewUser.isEmpty() && !attNewUser.isBlank();
+    return attNewUser != null && !attNewUser.isBlank() && !attNewUser.equals(attOldUser);
   }
 
 }
