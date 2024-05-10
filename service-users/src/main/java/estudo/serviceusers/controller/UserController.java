@@ -8,12 +8,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import estudo.serviceusers.dto.UserMod;
 import estudo.serviceusers.dto.UserSave;
 import estudo.serviceusers.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RequiredArgsConstructor
@@ -24,7 +26,7 @@ public class UserController extends BaseController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<Object> postUser(@RequestBody @Valid UserSave user, HttpServletRequest request) {
+    public ResponseEntity<Object> registerUser(@RequestBody @Valid UserSave user, HttpServletRequest request) {
         try {
             if (userService.findUserEmail(user.email()).isEmpty()) {
                 log(this, request.getMethod(), request.getRequestURI(), "Novo id cadastrado",
@@ -50,6 +52,25 @@ public class UserController extends BaseController {
                 log(this, request.getMethod(), request.getRequestURI(), authentication.getName(),
                         HttpStatus.OK.value());
                 return getResponse(user.get(), HttpStatus.OK);
+            }
+            log(this, request.getMethod(), request.getRequestURI(), authentication.getName(),
+                    HttpStatus.OK.value(), "Este usuário não existe");
+            return getResponse("Este usuário não existe", HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            log(this, request.getMethod(), request.getRequestURI(), authentication.getName(),
+                    HttpStatus.OK.value(), e.getMessage());
+            return getResponse("Serviço indisponível", HttpStatus.SERVICE_UNAVAILABLE);
+        }
+    }
+
+    @PutMapping
+    public ResponseEntity<Object> updateUser(@RequestBody @Valid UserMod newUser, HttpServletRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        try {
+            if (userService.findUserId(authentication.getName()).isPresent()) {
+                log(this, request.getMethod(), request.getRequestURI(), authentication.getName(),
+                        HttpStatus.OK.value());
+                return getResponse(userService.updateUser(newUser, authentication.getName()), HttpStatus.OK);
             }
             log(this, request.getMethod(), request.getRequestURI(), authentication.getName(),
                     HttpStatus.OK.value(), "Este usuário não existe");
