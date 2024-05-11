@@ -12,6 +12,10 @@ spring:
             uri: lb://service-login
             predicates:
               - Path=/login/**
+          - id: service-imc
+            uri: lb://service-imc
+            predicates:
+              - Path=/imc/**
 server:
   port: 8765
 eureka:
