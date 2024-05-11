@@ -31,15 +31,15 @@ public class UserController extends BaseController {
         try {
             if (userService.findUserEmail(userSave.email()).isEmpty()) {
                 var user = userService.saveUser(userSave);
-                log(this, request.getMethod(), request.getRequestURI(), "Novo id cadastrado",
+                log(this, request.getMethod(), request.getRequestURI(), user.id(),
                         HttpStatus.CREATED.value());
                 return getResponse(user, HttpStatus.CREATED);
             }
-            log(this, request.getMethod(), request.getRequestURI(), "Não cadastrado",
+            log(this, request.getMethod(), request.getRequestURI(),
                     HttpStatus.BAD_REQUEST.value(), "Já existe um usuário com este email");
             return getResponse("Já existe um usuário com este email", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            log(this, request.getMethod(), request.getRequestURI(), "Não cadastrado",
+            log(this, request.getMethod(), request.getRequestURI(),
                     HttpStatus.SERVICE_UNAVAILABLE.value(), e.getMessage());
             return getResponse("Serviço indisponível", HttpStatus.SERVICE_UNAVAILABLE);
         }

@@ -61,4 +61,13 @@ public class BaseController {
                         erro));
     }
 
+    protected void log(Object obj, String method, String uri, int status, String erro) {
+        LoggerFactory.getLogger(obj.getClass())
+                .error(String.format("Requisição: %s, URI: %s, Status: %d,\nErro: %s",
+                        method,
+                        uri,
+                        status,
+                        erro));
+    }
+
 }
