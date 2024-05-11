@@ -18,7 +18,7 @@ public class Imc {
     }
 
     private double calcImc(double weight, double height) {
-        return (weight / Math.pow((height / 100), 2));
+        return (weight / Math.pow(height, 2));
     }
 
     private void defineDiet(double imc) {

@@ -1,6 +1,6 @@
 spring:
   application:
-    name: name=service-imc
+    name: service-imc
   data:
     mongodb:
       uri: mongodb://localhost:27017/db_imc
