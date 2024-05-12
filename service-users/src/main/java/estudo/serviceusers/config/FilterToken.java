@@ -43,6 +43,8 @@ public class FilterToken extends OncePerRequestFilter {
 			return;
 		}
 		if (request.getRequestURI().startsWith("/auth")
+				|| request.getRequestURI().startsWith("/swagger-ui")
+				|| request.getRequestURI().startsWith("/v3/api-docs")
 				|| request.getRequestURI().equals("/user/register")) {
 			filterChain.doFilter(request, response);
 			return;

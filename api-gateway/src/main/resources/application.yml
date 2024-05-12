@@ -7,7 +7,7 @@ spring:
           - id: service-users
             uri: lb://service-users
             predicates:
-              - Path=/user/**
+              - Path=/user/**, /swagger-ui/**, /v3/api-docs/**
           - id: service-login
             uri: lb://service-login
             predicates:
