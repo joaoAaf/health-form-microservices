@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import estudo.serviceusers.dto.UserAuth;
 import estudo.serviceusers.service.AuthService;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
+@Hidden
 @RestController
 @RequestMapping("auth")
 public class AuthController extends BaseController {

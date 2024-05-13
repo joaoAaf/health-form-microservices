@@ -6,26 +6,43 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import estudo.serviceusers.dto.UserMod;
 import estudo.serviceusers.dto.UserSave;
 import estudo.serviceusers.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @RequiredArgsConstructor
+// Inclui nos endpoints do Swagger o exemplo de resposta
+@ApiResponse(content = @Content(examples = { @ExampleObject(name = "Sucesso", value = """
+        {
+          "data": {
+            "id": "String",
+            "name": "String",
+            "email": "String"
+          },
+          "port": String
+        }""") }))
 @RestController
 @RequestMapping("user")
 public class UserController extends BaseController {
 
     private final UserService userService;
 
+    // Inclui no endpoint do Swagger a descrição do endpoint
+    @Operation(summary = "Cadastra um novo usuário")
     @PostMapping("/register")
     public ResponseEntity<Object> registerUser(@RequestBody @Valid UserSave userSave, HttpServletRequest request) {
         try {
@@ -45,8 +62,10 @@ public class UserController extends BaseController {
         }
     }
 
+    // Inclui no endpoint do Swagger o header de autorização personalizado e a descrição do endpoint
+    @Operation(security = { @SecurityRequirement(name = "Autorization") }, summary = "Retorna o usuário logado")
     @GetMapping
-    public ResponseEntity<Object> getUser(HttpServletRequest request) {
+    public ResponseEntity<Object> getUser( HttpServletRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         try {
             var user = userService.findUserId(authentication.getName());
@@ -65,6 +84,8 @@ public class UserController extends BaseController {
         }
     }
 
+    // Inclui no endpoint do Swagger o header de autorização personalizado e a descrição do endpoint
+    @Operation(security = { @SecurityRequirement(name = "Autorization") }, summary = "Atualiza o usuário logado")
     @PutMapping
     public ResponseEntity<Object> updateUser(@RequestBody @Valid UserMod newUser, HttpServletRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -85,6 +106,10 @@ public class UserController extends BaseController {
         }
     }
 
+    // Inclui no endpoint do Swagger o header de autorização personalizado e a descrição do endpoint
+    @Operation(security = { @SecurityRequirement(name = "Autorization") }, summary = "Deleta o usuário logado")
+    @ApiResponse(content = @Content(examples = { @ExampleObject(name = "Sucesso", value = """
+                {}""") }))
     @DeleteMapping
     public ResponseEntity<Object> deleteUser(HttpServletRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
