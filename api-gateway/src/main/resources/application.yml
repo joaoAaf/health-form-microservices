@@ -7,7 +7,9 @@ spring:
           - id: service-users
             uri: lb://service-users
             predicates:
-              - Path=/user/**, /swagger-ui/**, /v3/api-docs/**
+              - Path=/user/**, /swagger-users/**, /v3/api-docs/**
+            filters:
+              - RewritePath=/swagger-users(?<segment>.*), /swagger-ui${segment}
           - id: service-login
             uri: lb://service-login
             predicates:
