@@ -19,7 +19,9 @@ spring:
           - id: service-imc
             uri: lb://service-imc
             predicates:
-              - Path=/imc/**
+              - Path=/imc/**, /docs-imc/**, /v3/api-docs/imc/**
+            filters:
+               - RewritePath=/docs-imc(?<segment>.*), /swagger-ui${segment}
 server:
   port: 8765
 eureka:
