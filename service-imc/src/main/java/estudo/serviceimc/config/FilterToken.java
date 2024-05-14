@@ -42,6 +42,11 @@ public class FilterToken extends OncePerRequestFilter {
 			filterChain.doFilter(request, response);
 			return;
 		}
+		if (request.getRequestURI().startsWith("/swagger-ui")
+				|| request.getRequestURI().startsWith("/v3/api-docs")) {
+			filterChain.doFilter(request, response);
+			return;
+		}
 		response.setStatus(HttpStatus.UNAUTHORIZED.value());
 		response.setContentType("application/json");
 		response.getWriter().write("{\"error\": \"Token ausente\"}");
