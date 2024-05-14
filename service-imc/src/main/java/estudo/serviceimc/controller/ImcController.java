@@ -11,17 +11,31 @@ import org.springframework.web.bind.annotation.RestController;
 
 import estudo.serviceimc.dto.ImcData;
 import estudo.serviceimc.service.ImcService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
+@ApiResponse(content = @Content(examples = { @ExampleObject(name = "Sucesso", value = """
+        {
+          "data": {
+            "imc": "double",
+            "msg": "String",
+            "diet": "String"
+          },
+          "port": "String"
+        }""") }))
 @RestController
 @RequestMapping("imc")
 public class ImcController extends BaseController {
 
     private final ImcService imcService;
 
+    @Operation(summary = "Calcula o IMC e retorna a mensagem de acordo com o resultado")
     @PostMapping
     public ResponseEntity<Object> getImc(@RequestBody @Valid ImcData imcData, HttpServletRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
