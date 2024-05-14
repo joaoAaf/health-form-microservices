@@ -7,13 +7,15 @@ spring:
           - id: service-users
             uri: lb://service-users
             predicates:
-              - Path=/user/**, /swagger-users/**, /v3/api-docs/**
+              - Path=/user/**, /docs-users/**, /v3/api-docs/users/**
             filters:
-              - RewritePath=/swagger-users(?<segment>.*), /swagger-ui${segment}
+              - RewritePath=/docs-users(?<segment>.*), /swagger-ui${segment}
           - id: service-login
             uri: lb://service-login
             predicates:
-              - Path=/login/**
+              - Path=/login/**, /docs-login/**, /v3/api-docs/login/**
+            filters:
+              - RewritePath=/docs-login(?<segment>.*), /swagger-ui${segment}
           - id: service-imc
             uri: lb://service-imc
             predicates:
