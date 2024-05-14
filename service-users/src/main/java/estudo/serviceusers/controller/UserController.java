@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
             "name": "String",
             "email": "String"
           },
-          "port": String
+          "port": "String"
         }""") }))
 @RestController
 @RequestMapping("user")

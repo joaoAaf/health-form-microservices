@@ -15,11 +15,21 @@ import org.springframework.web.bind.annotation.RestController;
 import estudo.servicelogin.dto.Login;
 import estudo.servicelogin.dto.User;
 import estudo.servicelogin.service.TokenService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
+@ApiResponse(content = @Content(examples = { @ExampleObject(name = "Sucesso", value = """
+        {
+          "data": "String",
+          "msg": "String",
+          "port": "String"
+        }""") }))
 @RestController
 @RequestMapping("login")
 public class LoginController extends BaseController {
@@ -27,6 +37,7 @@ public class LoginController extends BaseController {
     private final TokenService tokenService;
     private final AuthenticationManager authManager;
 
+    @Operation(summary = "Realiza o login do usuário")
     @PostMapping
     public ResponseEntity<Object> login(@RequestBody @Valid Login login, HttpServletRequest request) {
         try {
