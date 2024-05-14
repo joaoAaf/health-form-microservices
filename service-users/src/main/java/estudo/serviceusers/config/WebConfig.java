@@ -24,7 +24,7 @@ public class WebConfig implements WebMvcConfigurer {
     // para permitir o uso de Bearer Token nos endpoints da API
     @Bean
     public OpenAPI openAPI() {
-        final String securitySchemeName = "Autorization";
+        final String securitySchemeName = "Authorization";
         return new OpenAPI()
                 .components(
                         new Components()

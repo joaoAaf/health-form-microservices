@@ -25,22 +25,22 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-// Inclui nos endpoints do Swagger o exemplo de resposta
-@ApiResponse(content = @Content(examples = { @ExampleObject(name = "Sucesso", value = """
-        {
-          "data": {
-            "id": "String",
-            "name": "String",
-            "email": "String"
-          },
-          "port": "String"
-        }""") }))
 @RestController
 @RequestMapping("user")
 public class UserController extends BaseController {
 
     private final UserService userService;
 
+    // Inclui nos endpoints do Swagger o exemplo de resposta
+    @ApiResponse(content = @Content(examples = { @ExampleObject(name = "Sucesso", value = """
+            {
+              "data": {
+                "id": "String",
+                "name": "String",
+                "email": "String"
+              },
+              "port": "String"
+            }""") }))
     // Inclui no endpoint do Swagger a descrição do endpoint
     @Operation(summary = "Cadastra um novo usuário")
     @PostMapping("/register")
@@ -62,10 +62,20 @@ public class UserController extends BaseController {
         }
     }
 
-    // Inclui no endpoint do Swagger o header de autorização personalizado e a descrição do endpoint
-    @Operation(security = { @SecurityRequirement(name = "Autorization") }, summary = "Retorna o usuário logado")
+    // Inclui nos endpoints do Swagger o exemplo de resposta
+    @ApiResponse(content = @Content(examples = { @ExampleObject(name = "Sucesso", value = """
+            {
+              "data": {
+                "id": "String",
+                "name": "String",
+                "email": "String"
+              },
+              "port": "String"
+            }""") }))
+    // Inclui no endpoint do Swagger o header de autorização personalizado e a descrição do endpoint 
+    @Operation(security = { @SecurityRequirement(name = "Authorization") }, summary = "Retorna o usuário logado")
     @GetMapping
-    public ResponseEntity<Object> getUser( HttpServletRequest request) {
+    public ResponseEntity<Object> getUser(HttpServletRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         try {
             var user = userService.findUserId(authentication.getName());
@@ -84,8 +94,18 @@ public class UserController extends BaseController {
         }
     }
 
+    // Inclui nos endpoints do Swagger o exemplo de resposta
+    @ApiResponse(content = @Content(examples = { @ExampleObject(name = "Sucesso", value = """
+            {
+              "data": {
+                "id": "String",
+                "name": "String",
+                "email": "String"
+              },
+              "port": "String"
+            }""") }))
     // Inclui no endpoint do Swagger o header de autorização personalizado e a descrição do endpoint
-    @Operation(security = { @SecurityRequirement(name = "Autorization") }, summary = "Atualiza o usuário logado")
+    @Operation(security = { @SecurityRequirement(name = "Authorization") }, summary = "Atualiza o usuário logado")
     @PutMapping
     public ResponseEntity<Object> updateUser(@RequestBody @Valid UserMod newUser, HttpServletRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -107,9 +127,9 @@ public class UserController extends BaseController {
     }
 
     // Inclui no endpoint do Swagger o header de autorização personalizado e a descrição do endpoint
-    @Operation(security = { @SecurityRequirement(name = "Autorization") }, summary = "Deleta o usuário logado")
+    @Operation(security = { @SecurityRequirement(name = "Authorization") }, summary = "Deleta o usuário logado")
     @ApiResponse(content = @Content(examples = { @ExampleObject(name = "Sucesso", value = """
-                {}""") }))
+            {}""") }))
     @DeleteMapping
     public ResponseEntity<Object> deleteUser(HttpServletRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
