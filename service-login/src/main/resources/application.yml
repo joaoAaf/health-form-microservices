@@ -6,9 +6,11 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://${EUREKA_HOST:localhost}:8761/eureka
   instance:
       preferIpAddress: true
 springdoc:
   api-docs:
     path: /v3/api-docs/login
+env-variables:
+  jwtSecret: ${JWT_SECRET:$LXbs2WhnF#S&NJJ^aCo#h$ASFL2P7qNFb$D$Mf&W2xz5hC7c7}

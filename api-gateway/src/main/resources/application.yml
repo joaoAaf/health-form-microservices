@@ -21,12 +21,12 @@ spring:
             predicates:
               - Path=/imc/**, /docs-imc/**, /v3/api-docs/imc/**
             filters:
-               - RewritePath=/docs-imc(?<segment>.*), /swagger-ui${segment}
+              - RewritePath=/docs-imc(?<segment>.*), /swagger-ui${segment}
 server:
   port: 8765
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://${EUREKA_HOST:localhost}:8761/eureka/
   instance:
       preferIpAddress: true
