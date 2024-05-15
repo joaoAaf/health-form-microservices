@@ -1,0 +1,69 @@
+networks:
+  internal-net:
+    name: internal-net
+    driver: bridge
+
+services:
+  db-mongo:
+    container_name: db-mongo
+    image: mongo
+    restart: always
+    networks:
+      - internal-net
+  discovery-server:
+    container_name: discovery-server
+    build: ./discovery-server
+    restart: always
+    networks:
+      - internal-net
+  service-users:
+    container_name: service-users
+    build: ./service-users
+    restart: always
+    networks:
+      - internal-net
+    depends_on:
+      - db-mongo
+      - discovery-server
+    environment:
+      MONGO_DB_HOST: db-mongo
+      EUREKA_HOST: discovery-server
+      JWT_SECRET: ${JWT_SECRET}
+  service-login:
+    container_name: service-login
+    build: ./service-login
+    restart: always
+    networks:
+      - internal-net
+    depends_on:
+      - discovery-server
+      - service-users
+    environment:
+      EUREKA_HOST: discovery-server
+      JWT_SECRET: ${JWT_SECRET}
+  service-imc:
+    container_name: service-imc
+    build: ./service-imc
+    restart: always
+    networks:
+      - internal-net
+    depends_on:
+      - discovery-server
+    environment:
+      EUREKA_HOST: discovery-server
+      JWT_SECRET: ${JWT_SECRET}
+  api-gateway:
+    container_name: api-gateway
+    build: ./api-gateway
+    restart: always
+    ports:
+      - 8765:8765
+    networks:
+      - internal-net
+    depends_on:
+      - discovery-server
+      - service-users
+      - service-login
+      - service-imc
+    environment:
+      EUREKA_HOST: discovery-server
