@@ -3,6 +3,19 @@ spring:
     name: api-gateway
   cloud:
     gateway:
+        default-filters:
+          - DedupeResponseHeader=Access-Control-Allow-Origin
+        globalcors:
+          corsConfigurations:
+            '[/**]':
+              maxAge: 3600
+              allowedOrigins: "*"
+              allowedHeaders: "*"
+              allowedMethods:
+                - GET
+                - POST
+                - DELETE
+                - PUT
         routes:
           - id: service-users
             uri: lb://service-users
