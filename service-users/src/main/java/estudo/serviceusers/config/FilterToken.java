@@ -32,7 +32,7 @@ public class FilterToken extends OncePerRequestFilter {
 			if (tokenService.loggedId(token).isEmpty()) {
 				response.setStatus(HttpStatus.UNAUTHORIZED.value());
 				response.setContentType("application/json");
-				response.getWriter().write("{\"error\": \"Token inválido ou expirado\"}");
+				response.getWriter().write("{\"msg\": \"Token inválido ou expirado\"}");
 				LoggerFactory.getLogger(this.getClass()).error("Token inválido ou expirado");
 				return;
 			}
