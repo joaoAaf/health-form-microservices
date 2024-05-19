@@ -49,7 +49,7 @@ public class FilterToken extends OncePerRequestFilter {
 		}
 		response.setStatus(HttpStatus.UNAUTHORIZED.value());
 		response.setContentType("application/json");
-		response.getWriter().write("{\"error\": \"Token ausente\"}");
+		response.getWriter().write("{\"msg\": \"Token ausente\"}");
 		LoggerFactory.getLogger(this.getClass()).error("Token ausente");
 	}
 }
