@@ -8,12 +8,16 @@ services:
     container_name: db-mongo
     image: mongo
     restart: always
+    ports:
+      - 27017:27017
     networks:
       - internal-net
   discovery-server:
     container_name: discovery-server
     build: ./discovery-server
     restart: always
+    ports:
+      - 8761:8761
     networks:
       - internal-net
   service-users:
